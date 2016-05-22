@@ -2,7 +2,7 @@
 #include <string.h>
 
 #include "test.c"
-#include "str.h"
+#include "../src/str.h"
 
 
 void test_find() {

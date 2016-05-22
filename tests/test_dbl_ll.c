@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "test.c"
-#include "dbl_ll.h"
+#include "../src/dbl_ll.h"
 
 void free_int_dbl_ll(dbl_ll * node) {
     if (node->key != node->data) {
