@@ -1,14 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "str.h"
 
-unsigned int str_find(char * str, int c) {
+int str_find(char * str, int c) {
     return str_find_n(str, c, 1);
 }
 
-unsigned int str_find_n(char * str, int c, int n) {
+
+int str_find_n(char * str, int c, int n) {
     if (n == 0) {
         return -1;
     }
@@ -36,34 +38,69 @@ unsigned int str_find_n(char * str, int c, int n) {
     return index;
 }
 
-// bool str_starts_with(char * str, char * look_for) {
-//     char * ptr1 = str;
-//     char * ptr2 = look_for;
 
-//     while (*ptr2 != '\0') {
-//         if (*ptr1 == '\0' || *ptr1 != *ptr2) {
-//             return false;
-//         }
+bool str_starts_with(char * str, char * look_for) {
+    char * ptr1 = str;
+    char * ptr2 = look_for;
 
-//         ptr1++;
-//         ptr2++;
-//     }
+    while (*ptr2 != '\0') {
+        if (*ptr1 == '\0' || *ptr1 != *ptr2) {
+            return false;
+        }
 
-//     // at least one character was matched
-//     return str != ptr1;
-// }
+        ptr1++;
+        ptr2++;
+    }
 
-// bool str_ends_with(char * str, char * look_for) {
-//     return false;
-// }
+    // at least one character was matched
+    return str != ptr1;
+    return false;
+}
+
+
+bool str_ends_with(char * str, char * look_for) {
+    unsigned str_len = 0;
+    unsigned look_for_len = 0;
+
+    char * ptr = str;
+    while (*ptr != '\0') {
+        str_len++;
+        ptr++;
+    }
+    char * str_it = (ptr - 1);
+
+    ptr = look_for;
+    while (*ptr != '\0') {
+        look_for_len++;
+        ptr++;
+    }
+    char * look_for_it = (ptr - 1);
+
+    if (look_for_len > str_len) {
+        return false;
+    }
+
+    while (look_for_it >= look_for) {
+        if (*str_it != *look_for_it) {
+            return false;
+        }
+        str_it--;
+        look_for_it--;
+    }
+
+    return true;
+}
+
 
 // bool str_contains(char * str, char * look_for) {
 //     return false;
 // }
 
-// bool str_equal(char * s1, char * s2) {
-//     return strcmp(s1, s2) == 0;
-// }
+
+bool str_equal(char * s1, char * s2) {
+    return strcmp(s1, s2) == 0;
+}
+
 
 char * str_copy(char * str) {
     size_t len = strlen(str) + 1;
@@ -72,9 +109,20 @@ char * str_copy(char * str) {
     return result;
 }
 
+
 void str_upper(char * str) {
     while (*str != '\0') {
         if ('a' <= *str || *str <= 'z') {
+            *str -= ('a' - 'A');
+        }
+        str++;
+    }
+}
+
+
+void str_lower(char * str) {
+    while (*str != '\0') {
+        if ('A' <= *str || *str <= 'Z') {
             *str += ('a' - 'A');
         }
         str++;
