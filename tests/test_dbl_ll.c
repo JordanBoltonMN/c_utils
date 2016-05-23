@@ -14,11 +14,27 @@ void free_int_dbl_ll(dbl_ll * node) {
     }
 }
 
+
 int int_dbl_cmp_key(void * key1, void * key2) {
     int * ptr1 = (int *) key1;
     int * ptr2 = (int *) key2;
     return *ptr1 - *ptr2;
 }
+
+
+dbl_ll * create_chain(unsigned int n) {
+    dbl_ll * head = NULL;
+    dbl_ll * node = NULL;
+    for (unsigned int i=0; i<n; i++) {
+        int * key_and_data = malloc(sizeof(int));
+        *key_and_data = i;
+        node = dbl_ll_create(key_and_data, key_and_data, NULL, NULL);
+        head = dbl_ll_insert(head, node);
+    }
+
+    return head;
+}
+
 
 void test_create() {
     int * key = (int *) malloc(sizeof(int));
@@ -36,7 +52,6 @@ void test_create() {
 
     free_int_dbl_ll(node);
 }
-
 
 
 void test_insert() {
@@ -73,10 +88,23 @@ void test_insert() {
 }
 
 
+void test_delete() {
+    dbl_ll * head = create_chain(3);
+    int * ptr = NULL;
+
+    ptr = head->key;
+    test_int(*ptr, 0);
+
+    ptr = head->next->key;
+    test_int(*ptr, 1);
+}
+
+
 int main() {
+    printf("Starting test_dbl_ll.c\n");
     test_create();
     test_insert();
-    // test_delete();
-
+    test_delete();
+    printf("Done!\n");
     return 0;
 }

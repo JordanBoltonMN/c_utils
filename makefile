@@ -22,7 +22,7 @@ CFLAGS   = -std=c99 -Wall -Wextra -I.
 
 LINKER   = gcc -o
 # linking flags here
-LFLAGS   = -Wall -Wextra -I. -lm
+LFLAGS   = -std=c99 -Wall -Wextra -I. -lm
 
 # change these to set the proper directories where each files should be
 SRCDIR   = src
@@ -57,7 +57,7 @@ remove: clean
 	@$(foreach test, $(TESTS), $(rm) $(TESTDIR)/$(TARGET)/$(test);)
 	@echo "Executable(s) removed!"
 
-run_tests:
+run_tests: $(TESTS)
 	$(foreach test, $(TESTS), ./$(TESTDIR)/$(TARGET)/$(test);)
 
 tests: $(TESTS)

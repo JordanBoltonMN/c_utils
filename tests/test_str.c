@@ -72,11 +72,13 @@ void test_lower() {
 
 
 int main() {
+    printf("Starting test_str.c\n");
     test_find();
     test_starts_with();
     test_ends_with();
     test_upper();
     test_lower();
+    printf("Done!\n");
 
     return 0;
 }
