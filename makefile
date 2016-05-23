@@ -13,6 +13,8 @@
 #                thanks to http://stackoverflow.com/users/128940/beta
 # ------------------------------------------------
 
+dirname = $(patsubst %/,%,$(dir $1))
+
 # project name (generate executable with this name)
 TARGET   = c_utils
 
@@ -36,9 +38,10 @@ OBJECTS  := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 rm       = rm -f
 
 # each test has their own main method
+TEST_SOURCES := $(wildcard $(TESTDIR)/test_*.c)
 TEST_OBJECTS  := $(filter-out $(OBJDIR)/main.o, $(OBJECTS)) $(TESTDIR)/test.o
-TESTS = test_str test_dbl_ll
-RUN_TESTS = ./test_str
+TESTS = $(TESTDIR)/test_str $(TESTDIR)/test_dbl_ll
+TESTS = $(TESTDIR)/$(TARGET)/test_str $(TESTDIR)/$(TARGET)/test_dbl_ll
 
 $(BINDIR)/$(TARGET): $(OBJECTS)
 	@$(LINKER) $@ $(LFLAGS) $(OBJECTS)
@@ -54,7 +57,7 @@ clean:
 
 remove: clean
 	@$(rm) $(BINDIR)/$(TARGET)
-	@$(foreach test, $(TESTS), $(rm) $(TESTDIR)/$(TARGET)/$(test);)
+	@$(foreach test, $(TESTS), $(rm) $(test);)
 	@echo "Executable(s) removed!"
 
 run_tests: $(TESTS)
@@ -62,8 +65,8 @@ run_tests: $(TESTS)
 
 tests: $(TESTS)
 
-test_%: $(TEST_OBJECTS)
-	@$(LINKER) $(TESTDIR)/$(TARGET)/$@ $(LFLAGS) $(TEST_OBJECTS) $(TESTDIR)/$@.c
+$(TESTDIR)/$(TARGET)/test_%: $(TEST_OBJECTS) tests/test_str.c
+	@$(LINKER) $@ $(LFLAGS) $^
 	@echo "Compiled "$@" successfully!"
 
 $(TESTDIR)/test.o: $(TESTDIR)/test.c
