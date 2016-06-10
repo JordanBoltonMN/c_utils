@@ -13,14 +13,30 @@ struct dbl_ll * dbl_ll_create(void * key, void * data, dbl_ll * prev, dbl_ll * n
 }
 
 
-struct dbl_ll * dbl_ll_insert(dbl_ll * root, dbl_ll * node) {
+struct dbl_ll * dbl_ll_insert_left(dbl_ll * root, dbl_ll * node) {
+    if (root == NULL) {
+        return node;
+    }
+
+    dbl_ll * ptr = root;
+    while (ptr->prev != NULL) {
+        ptr = ptr->prev;
+    }
+
+    ptr->prev = node;
+    node->next = ptr;
+
+    return root;
+}
+
+struct dbl_ll * dbl_ll_insert_right(dbl_ll * root, dbl_ll * node) {
     if (root == NULL) {
         return node;
     }
 
     dbl_ll * ptr = root;
     while (ptr->next != NULL) {
-        ptr = ptr-> next;
+        ptr = ptr->next;
     }
 
     ptr->next = node;
@@ -29,32 +45,43 @@ struct dbl_ll * dbl_ll_insert(dbl_ll * root, dbl_ll * node) {
     return root;
 }
 
+struct dbl_ll_del dbl_ll_delete(dbl_ll * root, void * key, dbl_ll_cmp_key cmp, dbl_ll_free release) {
+    struct dbl_ll_del result;
+    result.deleted = false;
+    result.root = root;
 
-bool dbl_ll_delete(dbl_ll * root, void * key, dbl_ll_cmp_key cmp, dbl_ll_free release) {
     if (root == NULL) {
-        return false;
+        result.root = root;
+        result.deleted = false;
+        return result;
     }
 
     dbl_ll * ptr = root;
-    while (ptr->next != NULL) {
-        if ( (*cmp)(key, ptr->key) == 0 ) {
-            dbl_ll * old_prev = ptr->prev;
-            dbl_ll * old_next = ptr->next;
+    while (ptr != NULL) {
+        int key_cmp = (*cmp)(key, ptr->key);
+        // match found
+        if (key_cmp == 0) {
+            result.deleted = true;
 
             if (ptr->prev != NULL) {
-                ptr->prev->next = old_next;
+                ptr->prev->next = ptr->next;
             }
             if (ptr->next != NULL) {
-                ptr->next->prev = old_prev;
+                ptr->next->prev = ptr->prev;
+            }
+            if (root == ptr) {
+                result.root = NULL;
             }
 
-            (*release)(ptr);
-
-            return true;
+            release(ptr);
+            return result;
+        }
+        else if (key_cmp == -1) {
+            ptr = ptr->prev;
         } else {
-            ptr = ptr-> next;
+            ptr = ptr->next;
         }
     }
 
-    return false;
+    return result;
 }

@@ -13,8 +13,6 @@
 #                thanks to http://stackoverflow.com/users/128940/beta
 # ------------------------------------------------
 
-dirname = $(patsubst %/,%,$(dir $1))
-
 # project name (generate executable with this name)
 TARGET   = c_utils
 
@@ -27,47 +25,36 @@ LINKER   = gcc -o
 LFLAGS   = -std=c99 -Wall -Wextra -I. -lm
 
 # change these to set the proper directories where each files should be
-SRCDIR   = src
-OBJDIR   = obj
-BINDIR   = bin
-TESTDIR  = tests
+SRC_DIR  = src
+OBJ_DIR  = obj
+BIN_DIR  = bin
 
-SOURCES  := $(wildcard $(SRCDIR)/*.c)
-INCLUDES := $(wildcard $(SRCDIR)/*.h)
-OBJECTS  := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+SOURCES  := $(wildcard $(SRC_DIR)/*.c)
+INCLUDES := $(wildcard $(SRC_DIR)/*.h)
+OBJECTS  := $(SOURCES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 rm       = rm -f
 
-# each test has their own main method
-TEST_SOURCES := $(wildcard $(TESTDIR)/test_*.c)
-TEST_OBJECTS  := $(filter-out $(OBJDIR)/main.o, $(OBJECTS)) $(TESTDIR)/test.o
-TESTS = $(TESTDIR)/test_str $(TESTDIR)/test_dbl_ll
-TESTS = $(TESTDIR)/$(TARGET)/test_str $(TESTDIR)/$(TARGET)/test_dbl_ll
+.PHONY : tests
 
-$(BINDIR)/$(TARGET): $(OBJECTS)
+$(BIN_DIR)/$(TARGET): $(OBJECTS)
 	@$(LINKER) $@ $(LFLAGS) $(OBJECTS)
 	@echo "Linking complete!"
 
-$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
+$(OBJECTS): $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@echo "Compiled "$<" successfully!"
 
 clean:
-	@$(rm) $(TEST_OBJECTS)
+	@$(rm) $(OBJECTS)
 	@echo "Cleanup complete!"
 
 remove: clean
-	@$(rm) $(BINDIR)/$(TARGET)
+	@$(rm) $(BIN_DIR)/$(TARGET)
 	@$(foreach test, $(TESTS), $(rm) $(test);)
 	@echo "Executable(s) removed!"
 
-run_tests: $(TESTS)
-	$(foreach test, $(TESTS), ./$(TESTDIR)/$(TARGET)/$(test);)
+tests:
+	cd ./tests && make
 
-tests: $(TESTS)
-
-$(TESTDIR)/$(TARGET)/test_%: $(TEST_OBJECTS) tests/test_str.c
-	@$(LINKER) $@ $(LFLAGS) $^
-	@echo "Compiled "$@" successfully!"
-
-$(TESTDIR)/test.o: $(TESTDIR)/test.c
-	@$(CC) $(CFLAGS) -c $< -o $@
+run-tests:
+	cd ./tests && make run

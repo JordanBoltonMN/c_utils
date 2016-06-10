@@ -1,8 +1,6 @@
 # Executables
-a.out
-main
-test_str
-test_dbl_ll
+bin/*
+tests/bin/*
 
 # Object files
 *.o

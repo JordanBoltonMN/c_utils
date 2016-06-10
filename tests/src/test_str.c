@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "test.c"
+#include "macros.c"
 #include "../src/str.h"
 
 
