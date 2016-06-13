@@ -41,10 +41,8 @@ OBJECTS      := $(SOURCES:$(ROOT_SRC_DIR)/%.c=$(ROOT_OBJ_DIR)/%.o)
 TEST_OBJECTS := $(filter-out $(ROOT_OBJ_DIR)/main.o, $(OBJECTS)) $(OBJ_DIR)/$(TARGET)_macros.o
 rm           = rm -f
 
-TESTS := $(BIN_DIR)/$(TARGET)_test_str
 TESTS := $(BIN_DIR)/$(TARGET)_test_dbl_ll
-
-test_src = $(SRC_DIR)/$(subst $(BIN_PREFIX),,$(1)).c
+TESTS += $(BIN_DIR)/$(TARGET)_test_str
 
 $(OBJECTS):
 	cd .. && make

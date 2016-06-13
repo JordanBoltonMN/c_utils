@@ -1,3 +1,5 @@
+.nfs0*
+
 # Executables
 bin/*
 tests/bin/*

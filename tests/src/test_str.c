@@ -3,25 +3,66 @@
 
 #include "macros.c"
 #include "../src/str.h"
+// #include "../src/dbl_ll.h"
 
+void test_find1() {
+    char str1[] = "";
+    char str2[] = "";
 
-void test_find() {
-    char str1[] = "abc";
-    char str2[] = "aaa";
+    struct str_find_result result = str_find(str1, str2);
+    test_int(result.count, 0);
 
-    test_int(str_find_n(str1, 'a', 1), 0);
-    test_int(str_find_n(str1, 'b', 1), 1);
-    test_int(str_find_n(str1, 'c', 1), 2);
-    test_int(str_find_n(str1, '!', 1), -1);
-    test_int(str_find_n(str1, 'a', 0), -1);
-    test_int(str_find_n(str1, 'a', 2), -1);
-
-    test_int(str_find_n(str2, 'a', 1), 0);
-    test_int(str_find_n(str2, 'a', 2), 1);
-    test_int(str_find_n(str2, 'a', 3), 2);
-    test_int(str_find_n(str2, 'a', 4), -1);
+    free_str_find_result(result);
 }
 
+void test_find2() {
+    char str1[] = "aa";
+    char str2[] = "aa";
+
+    struct str_find_result result = str_find(str1, str2);
+    struct dbl_ll * root = result.root;
+
+    test_int(result.count, 1);
+
+    char ** match = (char **) root->data;
+
+    test_pointer(str1, *match);
+
+    free_str_find_result(result);
+}
+
+void test_find3() {
+    char str1[] = "baa";
+    char str2[] = "aa";
+
+    struct str_find_result result = str_find(str1, str2);
+    struct dbl_ll * root = result.root;
+
+    test_int(result.count, 1);
+
+    char ** match = (char **) root->data;
+
+    test_pointer(str1 + 1, *match);
+
+    free_str_find_result(result);
+}
+
+void test_find4() {
+    char str1[] = "aaaaa";
+    char str2[] = "aa";
+
+    struct str_find_result result = str_find(str1, str2);
+    test_int(result.count, 2);
+
+    struct dbl_ll * root = result.root;
+    char ** first_match = (char **) root->data;
+    char ** second_match = (char **) root->next->data;
+
+    test_pointer(str1, *first_match);
+    test_pointer(str1 + strlen(str2), *second_match);
+
+    free_str_find_result(result);
+}
 
 void test_starts_with() {
     char str1[] = "abc";
@@ -73,12 +114,15 @@ void test_lower() {
 
 int main() {
     printf("Starting test_str.c\n");
-    test_find();
+    test_find1();
+    test_find2();
+    test_find3();
+    test_find4();
     test_starts_with();
     test_ends_with();
     test_upper();
     test_lower();
-    printf("Done!\n");
+    printf("Done with test_str.c\n");
 
     return 0;
 }

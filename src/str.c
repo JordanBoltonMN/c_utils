@@ -5,37 +5,72 @@
 
 #include "str.h"
 
-int str_find(char * str, int c) {
-    return str_find_n(str, c, 1);
+#ifndef DBL_LL_H
+#define DBL_LL_H
+    #include "dbl_ll.h"
+#endif
+
+
+struct str_find_result str_find(char * str, char * look_for) {
+    struct str_find_result result;
+    result.root = NULL;
+    result.look_for_len = strlen(look_for);
+    result.count = 0;
+
+    if (result.look_for_len == 0) {
+        return result;
+    }
+
+    char * iter = strstr(str, look_for);
+    while (iter != NULL) {
+        char ** start_of_match = (char **) malloc(sizeof(char **));
+        *start_of_match = iter;
+        struct dbl_ll * node = dbl_ll_create(
+            (void *) start_of_match,
+            (void *) start_of_match,
+            NULL,
+            NULL
+        );
+
+        result.root = dbl_ll_insert_right(result.root, node);
+        result.count++;
+
+        iter += result.look_for_len;
+        iter = strstr(iter, look_for);
+    }
+
+    return result;
 }
 
 
-int str_find_n(char * str, int c, int n) {
-    if (n == 0) {
-        return -1;
+void free_str_find_result(struct str_find_result result) {
+    struct dbl_ll * current = result.root;
+    struct dbl_ll * next = NULL;
+    while (current != NULL) {
+        next = current->next;
+        free(current->data);
+        free(current);
+        current = next;
     }
+}
 
-    char * ptr = str;
-    char * char_location = NULL;
 
-    while (n > 0) {
-        char_location = strchr(ptr, c);
-        if (char_location == NULL) {
-            return -1;
-        }
+bool str_contains(char * str, char * look_for) {
+    struct str_find_result result = str_find(str, look_for);
+    return result.count > 0;
+}
 
-        ptr = char_location + 1;
 
-        // char_location was the last character in the string
-        if (ptr == '\0') {
-            return -1;
-        }
+bool str_equal(char * s1, char * s2) {
+    return strcmp(s1, s2) == 0;
+}
 
-        n--;
-    }
 
-    int index = char_location - str;
-    return index;
+char * str_copy(char * str) {
+    size_t len = strlen(str) + 1;
+    void * result = malloc(sizeof(char) * len);
+    memcpy(result, str, len);
+    return (char *) result;
 }
 
 
@@ -89,24 +124,6 @@ bool str_ends_with(char * str, char * look_for) {
     }
 
     return true;
-}
-
-
-// bool str_contains(char * str, char * look_for) {
-//     return false;
-// }
-
-
-bool str_equal(char * s1, char * s2) {
-    return strcmp(s1, s2) == 0;
-}
-
-
-char * str_copy(char * str) {
-    size_t len = strlen(str) + 1;
-    char * result = malloc(sizeof(char) * len);
-    memcpy(result, str, len);
-    return result;
 }
 
 
