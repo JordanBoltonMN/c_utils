@@ -34,7 +34,7 @@ INCLUDES := $(wildcard $(SRC_DIR)/*.h)
 OBJECTS  := $(SOURCES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 rm       = rm -f
 
-.PHONY : tests
+.PHONY: clean remove tests run-tests
 
 $(BIN_DIR)/$(TARGET): $(OBJECTS)
 	@$(LINKER) $@ $(LFLAGS) $(OBJECTS)
@@ -46,11 +46,12 @@ $(OBJECTS): $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
 
 clean:
 	@$(rm) $(OBJECTS)
+	cd ./tests && make clean
 	@echo "Cleanup complete!"
 
 remove: clean
 	@$(rm) $(BIN_DIR)/$(TARGET)
-	@$(foreach test, $(TESTS), $(rm) $(test);)
+	cd ./tests && make remove
 	@echo "Executable(s) removed!"
 
 tests:

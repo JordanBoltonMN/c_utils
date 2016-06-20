@@ -1,9 +1,6 @@
 #include <stdbool.h>
 
-#ifndef DBL_LL_H
-#define DBL_LL_H
-    #include "dbl_ll.h"
-#endif
+#include "dbl_ll.h"
 
 typedef struct str_find_result {
     struct dbl_ll * root;
@@ -11,13 +8,13 @@ typedef struct str_find_result {
     unsigned int count;
 } str_find_result;
 
-str_find_result str_find(char * str, char * look_for);
+str_find_result str_find(const char * str, const char * look_for);
 void free_str_find_result(struct str_find_result result);
 
-bool str_contains(char * str, char * look_for);
-bool str_equal(char * s1, char * s2);
-char * str_copy(char * str);
-bool str_starts_with(char * str, char * look_for);
-bool str_ends_with(char * str, char * look_for);
+bool str_contains(const char * str, const char * look_for);
+bool str_equal(const char * s1, const char * s2);
+char * str_copy(const char * str);
+bool str_starts_with(const char * str, const char * look_for);
+bool str_ends_with(const char * str, const char * look_for);
 void str_upper(char * str);
 void str_lower(char * str);

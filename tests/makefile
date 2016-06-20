@@ -44,6 +44,8 @@ rm           = rm -f
 TESTS := $(BIN_DIR)/$(TARGET)_test_dbl_ll
 TESTS += $(BIN_DIR)/$(TARGET)_test_str
 
+.PHONY: clean remove tests run
+
 $(OBJECTS):
 	cd .. && make
 

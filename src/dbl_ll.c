@@ -2,7 +2,6 @@
 
 #include "dbl_ll.h"
 
-
 struct dbl_ll * dbl_ll_create(void * key, void * data, dbl_ll * prev, dbl_ll * next) {
     struct dbl_ll * node = (struct dbl_ll *) malloc(sizeof(struct dbl_ll));
     node->key = key;
@@ -13,23 +12,7 @@ struct dbl_ll * dbl_ll_create(void * key, void * data, dbl_ll * prev, dbl_ll * n
 }
 
 
-struct dbl_ll * dbl_ll_insert_left(dbl_ll * root, dbl_ll * node) {
-    if (root == NULL) {
-        return node;
-    }
-
-    dbl_ll * ptr = root;
-    while (ptr->prev != NULL) {
-        ptr = ptr->prev;
-    }
-
-    ptr->prev = node;
-    node->next = ptr;
-
-    return root;
-}
-
-struct dbl_ll * dbl_ll_insert_right(dbl_ll * root, dbl_ll * node) {
+struct dbl_ll * dbl_ll_insert(dbl_ll * root, dbl_ll * node) {
     if (root == NULL) {
         return node;
     }
@@ -45,7 +28,7 @@ struct dbl_ll * dbl_ll_insert_right(dbl_ll * root, dbl_ll * node) {
     return root;
 }
 
-struct dbl_ll_del dbl_ll_delete(dbl_ll * root, void * key, dbl_ll_cmp_key cmp, dbl_ll_free release) {
+struct dbl_ll_del dbl_ll_delete(dbl_ll * root, const void * key, dbl_ll_cmp_key cmp, dbl_ll_free release) {
     struct dbl_ll_del result;
     result.deleted = false;
     result.root = root;
@@ -84,4 +67,18 @@ struct dbl_ll_del dbl_ll_delete(dbl_ll * root, void * key, dbl_ll_cmp_key cmp, d
     }
 
     return result;
+}
+
+
+bool dbl_ll_contains(const dbl_ll * root, const void * key, dbl_ll_cmp cmp) {
+    const dbl_ll * node = root;
+
+    while (node != NULL) {
+        if ( (*cmp)(node->key, key) ) {
+            return true;
+        }
+        node = node->next;
+    }
+
+    return false;
 }

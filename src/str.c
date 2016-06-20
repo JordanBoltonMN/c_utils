@@ -4,14 +4,9 @@
 #include <stdbool.h>
 
 #include "str.h"
+#include "dbl_ll.h"
 
-#ifndef DBL_LL_H
-#define DBL_LL_H
-    #include "dbl_ll.h"
-#endif
-
-
-struct str_find_result str_find(char * str, char * look_for) {
+struct str_find_result str_find(const char * str, const char * look_for) {
     struct str_find_result result;
     result.root = NULL;
     result.look_for_len = strlen(look_for);
@@ -21,10 +16,10 @@ struct str_find_result str_find(char * str, char * look_for) {
         return result;
     }
 
-    char * iter = strstr(str, look_for);
+    const char * iter = strstr(str, look_for);
     while (iter != NULL) {
         char ** start_of_match = (char **) malloc(sizeof(char **));
-        *start_of_match = iter;
+        *start_of_match = (char *) iter;
         struct dbl_ll * node = dbl_ll_create(
             (void *) start_of_match,
             (void *) start_of_match,
@@ -32,7 +27,7 @@ struct str_find_result str_find(char * str, char * look_for) {
             NULL
         );
 
-        result.root = dbl_ll_insert_right(result.root, node);
+        result.root = dbl_ll_insert(result.root, node);
         result.count++;
 
         iter += result.look_for_len;
@@ -55,18 +50,18 @@ void free_str_find_result(struct str_find_result result) {
 }
 
 
-bool str_contains(char * str, char * look_for) {
+bool str_contains(const char * str, const char * look_for) {
     struct str_find_result result = str_find(str, look_for);
     return result.count > 0;
 }
 
 
-bool str_equal(char * s1, char * s2) {
+bool str_equal(const char * s1, const char * s2) {
     return strcmp(s1, s2) == 0;
 }
 
 
-char * str_copy(char * str) {
+char * str_copy(const char * str) {
     size_t len = strlen(str) + 1;
     void * result = malloc(sizeof(char) * len);
     memcpy(result, str, len);
@@ -74,9 +69,9 @@ char * str_copy(char * str) {
 }
 
 
-bool str_starts_with(char * str, char * look_for) {
-    char * ptr1 = str;
-    char * ptr2 = look_for;
+bool str_starts_with(const char * str, const char * look_for) {
+    const char * ptr1 = str;
+    const char * ptr2 = look_for;
 
     while (*ptr2 != '\0') {
         if (*ptr1 == '\0' || *ptr1 != *ptr2) {
@@ -93,34 +88,34 @@ bool str_starts_with(char * str, char * look_for) {
 }
 
 
-bool str_ends_with(char * str, char * look_for) {
+bool str_ends_with(const char * str, const char * look_for) {
     unsigned str_len = 0;
     unsigned look_for_len = 0;
 
-    char * ptr = str;
-    while (*ptr != '\0') {
+    const char * str_iter = str;
+    while (*str_iter != '\0') {
+        str_iter++;
         str_len++;
-        ptr++;
     }
-    char * str_it = (ptr - 1);
+    str_iter--;
 
-    ptr = look_for;
-    while (*ptr != '\0') {
+    const char * look_for_iter = look_for;
+    while (*look_for_iter != '\0') {
+        look_for_iter++;
         look_for_len++;
-        ptr++;
     }
-    char * look_for_it = (ptr - 1);
+    look_for_iter--;
 
     if (look_for_len > str_len) {
         return false;
     }
 
-    while (look_for_it >= look_for) {
-        if (*str_it != *look_for_it) {
+    while (look_for_iter >= look_for) {
+        if (*str_iter != *look_for_iter) {
             return false;
         }
-        str_it--;
-        look_for_it--;
+        str_iter--;
+        look_for_iter--;
     }
 
     return true;
