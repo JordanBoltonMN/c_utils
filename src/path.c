@@ -1,12 +1,9 @@
-#include <sys/types.h>
 #include <err.h>
 #include <errno.h>
-#include <fnmatch.h>
-#include <fts.h>
-#include <regex.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "path.h"
-#include "dbl_ll.h"
 #include "str.h"
 
 void free_path_search(dbl_ll * root) {

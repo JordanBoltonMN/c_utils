@@ -1,10 +1,7 @@
-#include <sys/types.h>
-#include <err.h>
-#include <errno.h>
-#include <fnmatch.h>
+#ifndef PATH_H
+#define PATH_H
+
 #include <fts.h>
-#include <string.h>
-#include <stdio.h>
 #include <regex.h>
 #include <stdlib.h>
 
@@ -15,3 +12,5 @@ int path_cmp(const FTSENT **a, const FTSENT **b);
 
 dbl_ll * path_search(char * const dir, const regex_t * pattern);
 void free_path_search(dbl_ll * root);
+
+#endif
