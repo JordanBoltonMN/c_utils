@@ -18,7 +18,7 @@ TARGET   = c_utils
 
 CC       = gcc
 # compiling flags here
-CFLAGS   = -std=c99 -Wall -Wextra -I.
+CFLAGS   = -Wall -Wextra -I.
 
 LINKER   = gcc -o
 # linking flags here
@@ -56,6 +56,9 @@ remove: clean
 
 tests:
 	cd ./tests && make
+
+run: $(BIN_DIR)/$(TARGET)
+	./$(BIN_DIR)/$(TARGET)
 
 run-tests:
 	cd ./tests && make run

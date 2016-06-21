@@ -70,11 +70,11 @@ struct dbl_ll_del dbl_ll_delete(dbl_ll * root, const void * key, dbl_ll_cmp_key 
 }
 
 
-bool dbl_ll_contains(const dbl_ll * root, const void * key, dbl_ll_cmp cmp) {
+bool dbl_ll_has(const dbl_ll * root, const void * key, dbl_ll_cmp_key cmp) {
     const dbl_ll * node = root;
 
     while (node != NULL) {
-        if ( (*cmp)(node->key, key) ) {
+        if ( (*cmp)(node->key, key) == 0 ) {
             return true;
         }
         node = node->next;
