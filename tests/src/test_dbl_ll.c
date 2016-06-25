@@ -232,7 +232,7 @@ void test_has3() {
 
 
 int main() {
-    printf("Starting test_dbl_ll.c\n");
+    printf("Running %s\n", __FILE__);
     test_create();
     test_insert();
     test_delete1();
@@ -241,6 +241,5 @@ int main() {
     test_has1();
     test_has2();
     test_has3();
-    printf("Done with test_dbl_ll.c\n");
     return 0;
 }

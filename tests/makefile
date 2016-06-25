@@ -58,7 +58,7 @@ remove: clean
 	@echo "Executable(s) removed!"
 
 run: tests
-	@echo "Starting tests."
+	@echo "Starting tests "
 	$(foreach test, $(TESTS), ./$(test);)
 	@echo "Done."
 

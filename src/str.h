@@ -12,7 +12,6 @@ typedef struct str_find_result {
 } str_find_result;
 
 str_find_result str_find(const char * str, const char * look_for);
-void free_str_find_result(struct str_find_result result);
 
 bool str_contains(const char * str, const char * look_for);
 
