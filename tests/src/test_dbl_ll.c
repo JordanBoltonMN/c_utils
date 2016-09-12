@@ -103,7 +103,7 @@ void test_insert() {
 }
 
 
-void test_delete1() {
+void test_del1() {
     dbl_ll * root = NULL;
     dbl_ll * node1 = int_create_node(0);
     dbl_ll * node2 = int_create_node(1);
@@ -121,7 +121,7 @@ void test_delete1() {
     *target_key = 1;
     const void * p = (void *) target_key;
 
-    struct dbl_ll_del result = dbl_ll_delete(
+    struct dbl_ll_del_result result = dbl_ll_del(
         root,
         p,
         &int_dbl_cmp_key,
@@ -140,7 +140,7 @@ void test_delete1() {
 }
 
 
-void test_delete2() {
+void test_del2() {
     dbl_ll * root = NULL;
     dbl_ll * node1 = int_create_node(0);
     int * target_key = malloc(sizeof(int));
@@ -149,7 +149,7 @@ void test_delete2() {
     root = dbl_ll_insert(root, node1);
     test_pointer(root, node1);
 
-    dbl_ll_del result = dbl_ll_delete(
+    dbl_ll_del_result result = dbl_ll_del(
         root,
         target_key,
         &int_dbl_cmp_key,
@@ -163,7 +163,7 @@ void test_delete2() {
 }
 
 
-void test_delete3() {
+void test_del3() {
     dbl_ll * root = NULL;
     dbl_ll * node1 = int_create_node(0);
     int * target_key = malloc(sizeof(int));
@@ -172,7 +172,7 @@ void test_delete3() {
     root = dbl_ll_insert(root, node1);
     test_pointer(root, node1);
 
-    dbl_ll_del result = dbl_ll_delete(
+    dbl_ll_del_result result = dbl_ll_del(
         root,
         target_key,
         &int_dbl_cmp_key,
@@ -235,9 +235,9 @@ int main() {
     printf("Running %s\n", __FILE__);
     test_create();
     test_insert();
-    test_delete1();
-    test_delete2();
-    test_delete3();
+    test_del1();
+    test_del2();
+    test_del3();
     test_has1();
     test_has2();
     test_has3();

@@ -11,10 +11,10 @@ typedef struct dbl_ll {
 } dbl_ll;
 
 
-typedef struct dbl_ll_del {
+typedef struct dbl_ll_del_result {
     bool deleted;
     struct dbl_ll * root;
-} dbl_ll_del;
+} dbl_ll_del_result;
 
 
 typedef int (*dbl_ll_cmp)(const dbl_ll *, const dbl_ll *);
@@ -25,7 +25,7 @@ struct dbl_ll * dbl_ll_create(void * key, void * data, dbl_ll * prev, dbl_ll * n
 
 struct dbl_ll * dbl_ll_insert(dbl_ll * root, dbl_ll * node);
 
-struct dbl_ll_del dbl_ll_delete(dbl_ll * root, const void * key, dbl_ll_cmp_key cmp, dbl_ll_free release);
+struct dbl_ll_del_result dbl_ll_del(dbl_ll * root, const void * key, dbl_ll_cmp_key cmp, dbl_ll_free release);
 
 bool dbl_ll_has(const dbl_ll * root, const void * key, dbl_ll_cmp_key cmp);
 

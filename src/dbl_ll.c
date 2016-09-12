@@ -28,8 +28,8 @@ struct dbl_ll * dbl_ll_insert(dbl_ll * root, dbl_ll * node) {
     return root;
 }
 
-struct dbl_ll_del dbl_ll_delete(dbl_ll * root, const void * key, dbl_ll_cmp_key cmp, dbl_ll_free release) {
-    struct dbl_ll_del result;
+struct dbl_ll_del_result dbl_ll_del(dbl_ll * root, const void * key, dbl_ll_cmp_key cmp, dbl_ll_free release) {
+    struct dbl_ll_del_result result;
     result.deleted = false;
     result.root = root;
 
