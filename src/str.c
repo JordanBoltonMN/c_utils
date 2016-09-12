@@ -9,17 +9,23 @@
 struct str_find_result str_find(const char * str, const char * look_for) {
     struct str_find_result result;
     result.root = NULL;
-    result.look_for_len = strlen(look_for);
+    result.look_for_len = -1;
     result.count = 0;
 
     if (str == NULL || look_for == NULL) {
+        return result;
+    } else {
+        result.look_for_len = strlen(look_for);
+    }
+
+    if (result.look_for_len == 0) {
         return result;
     }
 
     const char * iter = strstr(str, look_for);
     while (iter != NULL) {
-        char ** start_of_match = (char **) malloc(sizeof(char **));
-        *start_of_match = (char *) iter;
+        char ** start_of_match = (char **) malloc(sizeof(char *));
+        *start_of_match = iter;
         struct dbl_ll * node = dbl_ll_create(
             (void *) start_of_match,
             (void *) start_of_match,
