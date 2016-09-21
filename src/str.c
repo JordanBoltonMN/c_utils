@@ -10,12 +10,13 @@ struct str_find_result str_find(const char * str, const char * look_for) {
     struct str_find_result result;
     result.root = NULL;
     result.look_for_len = -1;
-    result.count = 0;
+    result.count = -1;
 
     if (str == NULL || look_for == NULL) {
         return result;
     } else {
         result.look_for_len = strlen(look_for);
+        result.count = 0;
     }
 
     if (result.look_for_len == 0) {
